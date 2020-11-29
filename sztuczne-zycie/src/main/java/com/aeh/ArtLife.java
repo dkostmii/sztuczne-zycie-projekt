@@ -8,17 +8,20 @@ package com.aeh;
 
 import java.util.ArrayList;
 
+import java.io.*;
+import java.sql.Timestamp;
+
 class Init {
     static final int SIZE_WORLD = 10; //rozmiar świata - NIE ZMIENIAĆ
-    static final int NUM_TACT = 100; //całkowita liczba taktów
+    static final int NUM_TACT = 500; //całkowita liczba taktów
     static final int VEW_NUM_TACT = 10; //co ile taktów wyświetla wyniki
     static final int START_NUM_CREEPERS = 500; //początkowa liczba pełzaczy
     static final int START_NUM_BACT = 500; //początkowa liczba bakterii
-    static final int CREEPER_ENERGY_PRO_LIFE = 1;  //ilość energii potrzebna do urodzenia nowego pełzacza
-    static final int CREEPER_INITIAL_ENERGY = 1; //zapas eneergii nowo urodzonego pełzacza
-    static final int CREEPER_ENERGY_RESERVE = 4; //rezerwa energii zostawiana podczas rodzenia nowego pełzacza
+    static final int CREEPER_ENERGY_PRO_LIFE = 3;  //ilość energii potrzebna do urodzenia nowego pełzacza
+    static final int CREEPER_INITIAL_ENERGY = 2; //zapas eneergii nowo urodzonego pełzacza
+    static final int CREEPER_ENERGY_RESERVE = 2; //rezerwa energii zostawiana podczas rodzenia nowego pełzacza
                                               //potrzebna do przetrwania, gdy jest mało pożywienia
-    static final int MAX_CREEPER_NUM_BORN_PER_TACK = 5; //maksymalna liczba pełzaczy rodzonych przez jednego
+    static final int MAX_CREEPER_NUM_BORN_PER_TACK = 4; //maksymalna liczba pełzaczy rodzonych przez jednego
                                                         //pełzacza w jednym takcie.
     // Liczba pełzaczy, które mogą się urodzić w jednym takcie jest ograniczona przez ilość energii pełzacza po
     // odjęciu CREEPER_ENERGY_RESERVE. Pełzacz nie może zgromadzić zbyt dużo energii, ponieważ gdy tylko
@@ -26,12 +29,12 @@ class Init {
     // rodzi co najmniej jednego pełzacza i jego poziom energii jest zmniejszany o CREEPER_ENERGY_PRO_LIFE
     // na każdego urodzonego pełzacza.
 
-    static final int MAX_BACT_EATEN_BY_CREEPER = 15; //Maksymalna liczba bakterii zjadanych przez pełzacza
+    static final int MAX_BACT_EATEN_BY_CREEPER = 13; //Maksymalna liczba bakterii zjadanych przez pełzacza
                                                     //w jednym takcie
-    static final double BACT_MULTIPLICATION_RATE = 0.8; //współczynnik rozmnażania bakterii - tyle nowych bakterii
+    static final double BACT_MULTIPLICATION_RATE = 0.5; //współczynnik rozmnażania bakterii - tyle nowych bakterii
                                                       //powstaje z jednej backterii w każdym takcie.
                                                       //MOŻE PRZYJMOWAĆ WARTOŚCI UŁAMKOWE.
-    static final double BACT_SPREAD_RATE = 0.5; //współczynnik rozprzestrzeniania nowo urodzonych bakterii.
+    static final double BACT_SPREAD_RATE = 0.7; //współczynnik rozprzestrzeniania nowo urodzonych bakterii.
                                                 //DOPUSZCZALNY ZAKRES: od 0 do 1
                                                 //Np. przy wsp. = 0.7, 70% zostaje w komórce,
                                                 //w której się urodziła, a 30% przenosi się
@@ -128,6 +131,31 @@ public class ArtLife {
     }
 
     public static void main(String[] args) {
+        Timestamp time = new Timestamp(System.currentTimeMillis());
+        String timestamp = time.toString().replaceAll("[:]", "").replaceAll("[. ]", "_");
+        try {
+            FileWriter fileWriter = new FileWriter("log/"+timestamp+".txt", true);
+            fileWriter.append("\nNUM_TACT = " + Init.NUM_TACT);
+            fileWriter.append("\nVEW_NUM_TACT = " + Init.VEW_NUM_TACT);
+            fileWriter.append("\nSTART_NUMBER_CREEPERS =" + Init.START_NUM_CREEPERS);
+            fileWriter.append("\nSTART_NUM_BACT = " + Init.START_NUM_BACT);
+            fileWriter.append("\nCREEPER_ENERGY_PRO_LIFE = " + Init.CREEPER_ENERGY_PRO_LIFE);
+            fileWriter.append("\nCREEPER_INITIAL_ENERGY = " + Init.CREEPER_INITIAL_ENERGY);
+            fileWriter.append("\nCREEPER_ENERGY_RESERVE = " + Init.CREEPER_ENERGY_RESERVE);
+            fileWriter.append("\nMAX_CREEPER_NUM_BORD_PER_TACK = " + Init.MAX_CREEPER_NUM_BORN_PER_TACK);
+            fileWriter.append("\nMAX_BACT_EATEN_BY_CREEPER = " + Init.MAX_BACT_EATEN_BY_CREEPER);
+            fileWriter.append("\nBACT_MULTIPLICATION_RATE = " + Init.BACT_MULTIPLICATION_RATE);
+            fileWriter.append("\nBACT_SPREAD_RATE = " + Init.BACT_SPREAD_RATE).append("\n\n");
+            fileWriter.close();
+
+            OutputStream printStream = new FileOutputStream("log/"+timestamp+".txt", true);
+            System.setOut(new PrintStream(printStream));
+        }
+        catch (IOException e) {
+            System.out.println("Nie moge zapisać logi");
+            e.printStackTrace();
+        }
+
         World mainWorld = new World();
         World tempWorld; // dodatkowy świat potrzebny czasowo w trakcie creepersAndBacteriaAction
                          // do przechowywania nowo urodzonych bakterii (wszystkich) i pełzaczy (tylko tych
