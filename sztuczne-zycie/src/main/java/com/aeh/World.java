@@ -1,5 +1,8 @@
 package com.aeh;
 
+import java.util.ArrayList;
+import java.awt.Point;
+
 public class World {
 
     public Cellule[][] board; // deklaracja zmiennej przechowującej tablicę komórek świata
@@ -95,5 +98,19 @@ public class World {
                 cell.setOld(true); numCellules++;
             }
         }
+    }
+
+    Cellule[][] cloneBoard() {
+        Cellule[][] cloned = new Cellule[Init.SIZE_WORLD][Init.SIZE_WORLD];
+        for (int i = 0; i < Init.SIZE_WORLD; i++) {
+            for (int j = 0; j < Init.SIZE_WORLD; j++) {
+                cloned[i][j] = new Cellule();
+                cloned[i][j].setBactNum(board[i][j].getBactNum());
+                for (int cr = 0; cr < board[i][j].getCreepersNum(); cr++) {
+                    cloned[i][j].addCreeper(new Creeper(i,j));
+                }
+            }
+        }
+        return cloned;
     }
 }

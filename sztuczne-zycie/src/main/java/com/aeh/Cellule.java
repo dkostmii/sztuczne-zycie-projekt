@@ -30,7 +30,7 @@ public class Cellule {
         bacteriaNum -= bactNum;
         if (bacteriaNum < 0) {
             bacteriaNum = 0;
-            System.out.println("UWAGA - miała miejsce próba usunięcia z komórki większej liczby bakterii " +
+            Init.outStream.println("UWAGA - miała miejsce próba usunięcia z komórki większej liczby bakterii " +
                     "niż w niej się znajdowało");
             //ten komunikat może ułatwić znalezienie błędów powstałych podczas poprawiania algorytmu
             //nie może pojawić się nigdy, gdy symulacja przebiega prawidłowo
@@ -51,7 +51,7 @@ public class Cellule {
         if (!creepers.isEmpty()) {
             creepers.remove(creeper);
         } else {
-            System.out.println("UWAGA - miała miejsce próba usunięcia pełzacza z komórki, w której nie ma pełzaczy");
+            Init.outStream.println("UWAGA - miała miejsce próba usunięcia pełzacza z komórki, w której nie ma pełzaczy");
             //ten komunikat może ułatwić znalezienie błędów powstałych podczas poprawiania algorytmu
             //nie może pojawić się nigdy, gdy symulacja przebiega prawidłowo
         }
