@@ -1,5 +1,7 @@
 # sztuczne-zycie-projekt
 
+#### [See guide](Guide/GUIDE.md)
+
 > Make sure you have
 > 1. Installed:
 >     * [Git](https://git-scm.com/)
