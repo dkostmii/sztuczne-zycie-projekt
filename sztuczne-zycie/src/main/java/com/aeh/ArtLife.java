@@ -588,27 +588,4 @@ class MainWindow extends JFrame implements ActionListener {
                 break;
         }
     }
-
-    public void verboseBoard(Cellule[][] current) {
-        for (int i = 0; i < Init.SIZE_WORLD; i++) {
-            for (int j = 0; j < Init.SIZE_WORLD; j++) {
-                System.out.format(" %d|%d ", current[i][j].getBactNum(), current[i][j].getCreepersNum());
-            }
-            System.out.println();
-        }
-    }
-    public void verboseAll() {
-        ListIterator<Cellule[][]> testIterator = this.board.listIterator();
-        while (testIterator.hasNext()) {
-            verboseBoard(testIterator.next());
-            System.out.println("----------------------------------------");
-        }
-    }
-    public void verboseAll(LinkedList<Cellule[][]> board) {
-        ListIterator<Cellule[][]> testIterator = board.listIterator();
-        while (testIterator.hasNext()) {
-            verboseBoard(testIterator.next());
-            System.out.println("----------------------------------------");
-        }
-    }
 }
