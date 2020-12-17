@@ -21,7 +21,7 @@
 ![Step 5](step-05.png)
 ![Step 5](step-05-alt.png)
 
-6\. Wait a moment and window with graphics will pop up.
+6\. Wait a moment and window with graphics will pop up. 🟣 - bacteries, 🟢 - creepers
 
 ![Step 6](step-06.png)
 
