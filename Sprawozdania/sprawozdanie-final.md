@@ -1,23 +1,214 @@
-/* Sztuczne życie v.2.1
-   Ostatnia aktualizacja 2017-04-11
-   CopyLeft Feliks Kurp 2017
-   Cooperation Andrzej Pepłowski (IZ-2/VI)
-*/
+---
+fontsize: 17pt
+title: \textbf{Algorytm Sztuczne Życie}
+author: \textit{Dmytro Martsynenko}
+---
+\thispagestyle{empty}
+\maketitle
+\centerline{Sprawozdanie końcowe}
+\pagebreak
+
+# Etap 1
+
+Celem pierwszego etapu jest zapoznanie się z przedstawionym algorytmem oraz badanie wpływu poszczególnych parametrów na dynamikę liczby bakterii oraz pełzaczy.
+Jaki stan systemu uważamay jako stabilny. Jest to taki stan, przy którym liczba bakterii nie przekracza 1 millionu, liczba każdego z oranizmów nie spada do zera oraz wahania tych liczb są w przedziale kilkuset.
+
+## Wykresy
+
+![](img/wykres1.png){ width=384px  }
+
+_Wykres 1_
+
+Na pierwszym wykresie otrzymaliśmy skok liczby bakterii do ok. 10 tysięcy, ale został on zniwelowany przez pełzaczy, liczba który sięga ok. 5 tysięcy po kilkunastu taktów, dalej liczba obydwu ogranizmów trzyma się 300-500.
+
+
+---
+
+![](img/wykres2.png){ width=384px }
+
+_Wykres 2_
+
+Na drugim wykresie zobaczymy cykliczne wahania ze średnią amplitudą ok. 400 bakterii oraz 200 pełzaczy. Także można zobaczyć modulacje takich wahań z okresem 300 taktów.
+
+
+---
+
+![](img/wykres3.png){ width=384px }
+
+_Wykres 3_
+
+Na trzecim wykresie mamy skok liczby bakterii oraz pełzaczy do ok 4 tysięcy. Na początku są wahania 600-700 organizmów, od 76 taktu one maleją.
+
+
+---
+
+## Wniosek
+
+Zmniejszenie początkowej liczby organizmów nie gwarantuje mniejsze wahania w systemie, ponieważ mocno wpływają na dynamikę współczynniki rozmnażania i rozprzestrzeniania bakterii oraz, aktywność pełzaczy, która zależy od orgraniczenia liczby urodzonych pełzaczy w takcie oraz od ograniczenia liczby zjedzonych bakterii prze pełzacza. Ponieważ reprezentacja bakterii oraz pełzaczy różni się, przeprowadzone badanie uwzględnia proces podbioru parametrów (znaleźć taki parametry dla *bakterii*, żeby były one równoważące parametrom dla *pełzaczy*).
+\
+
+# Etap 2 
+
+Zadaniem drugiego etapu było dokonanie wtrzyknięcia dużej liczby bakterii do komórek świata, co odbywa się przy *zakażeniu* w rzeczywistości, dlatego dalej biędziemy nazywać *wstrzyknięcie bakterii* **zakażeniem.**
+Po zakażeniu komórek świata należy podać niektórą ilość pełzaczy, co jest bardzo podobne do *podawania __leczenia__*. Dokonywać takiego leczenia należy przez niektóry czas, tak żeby zobaczyć efekt, ponieważ algorytm pobiera wyniki przy domyślnych ustawieniach *co 10 taktów*.
+Zadaniem opcjonalnym jest implementacja świata w postaci graficznej, z symulacją w czasie rzeczywistym. Pozwala to lepiej zrozumieć zachowanie modelu *Drapieżniki i ofiary* w praktyce.
+
+## Opis projektu
+
+W celu implementacji zakażenia w symulowanym świecie, należy dokonać wyboru punktu wsztrzyknięcia. Najlepiej to zrobić przy pomocy losowania dwóch liczb odpowiadającym pozycji losowanego punktu.
+Pojawiły się dodatkowe parametry, niezbędne do ustawienia parametrów zakażenia:
+* Łączna liczba bakterii wykorzystanych przy zakażeniu - **INJECTED_BACT_NUM**
+* Od którego takty zaczyna się wstrzyknięcie - **START_INJECTING_AT_TACT**
+* Długość wstrzyknięcia - **INJECT_FOR_TACTS**
+
+Także są parametry *leczenia*:
+* Łączna liczba pełzaczy do leczenia - **INJECTED_CREEPERS_NUM**
+* Przez ile taktów od początku zakażenia zacząć leczenie - **INJECT_CREEPERS_OFFSET**
+
+Końcowa wersja projektu przedstawiona w postaci graficznej, która da możliwość zobaczyć proces zakażenia, a następnie działanie procesu lecznenia.
+
+![](./img/spr2/wyglad-okna.png){ width=384px }
+
+Rysunek 4: _Wygląd okna symulacji_
+
+Na _Rysynku 4_ przedstawiono wygląd okna symulacji po uruchomieniu programu. Fioletowym kolorem zaznaczono komórki swiata, w których liczba bakterii jest *większa od liczby pełzaczy*, a zielonym - *równa lub mniejsza*. W ciemniejszych komórkach liczba organizmów stanowi zero.
+
+Żeby proces zakażenia oraz leczenia było łatwo zobaczyć, został dodany parametr **MAX_INTENSITY_COUNT**, który wyznacza maksymalną intensywność koloru dla komórki podawając pewną liczbę organizmów. Działa to w taki sposób, że dzielimy znaczenie alpha ustawionego koloru dla komórki przez **MAX_INTENSITY_COUNT**. Należy zwrócić uwagę, że na _Rysynku 4_ alpha jest znacznie mniejsza od 1.
+
+<figure>
+![](./img/spr2/sim01.png){ width=256px }
+![](./img/spr2/sim02.png){ width=256px }
+
+![](./img/spr2/sim03.png){ width=256px }
+![](./img/spr2/sim04.png){ width=256px }
+
+<figcaption>Rysunek 5: _Przykład uruchomienia symulacji (takty 50-65)_</figcaption>
+</figure>
+
+W danym przykładzie parametr **START_INJECTING_AT_TACT** ustawiono na **40**. Ale ponieważ zakażenie dopiero zaczyna się w tym takcie, zobaczymy efekt chociażby po kilku taktach, a w danym przypadku w takcie 45, bo ustawiliśmy parametr **VEW_NUM_TACT** na **5**, co znaczy, że aktualizujemy stan symulacji co 5 taktów.
+
+Najbardziej znaczącymi taktami w danej symulacji są takty 50-65.
+W takcie 50 rozszerza się obszar zakażenia, który na początku symulacji znajduje się w jednym punkcie.
+W takcie 55 gwałtownie rośnie liczba pełzaczy, które wykonują funkcje obronną symulowanego orgranizmu.
+W takcie 60 widać delokalizację całego procesu, zajmuje on prawie cały obszar świata, przewagę w liczbie trzymają pełzacze.
+W takcie 65 liczba obu organizmów zaczyna się zmniejszać się, leczenie już się zakończyło.
+
+<figure>
+![](./img/spr2/sim-end.png){ width=384px }
+
+<figcaption>Rysunek 6: _Koniec procesów zakażenia oraz leczenia_</figcaption>
+</figure>
+
+Na powyższym zrzucie zobaczymy stan świata w *takcie 70*. Niczym się nie różni on od stanu stabilnego
+
+```
+  PARAMETRY URUCHOMIENIA
+_____________________________________________________
+  Całkowita liczba taktów  
+_____________________________________________________
+  500
+
+_____________________________________________________
+  Wyświetlaj wyniki co  
+_____________________________________________________
+  5 taktów
+
+_____________________________________________________
+  Początkowa liczba pełzaczy  
+_____________________________________________________
+  500
+
+_____________________________________________________
+  Początkowa liczba bakterii  
+_____________________________________________________
+  500
+
+_____________________________________________________
+  Liczba energii do urodzenia pełzacza  
+_____________________________________________________
+  3
+
+_____________________________________________________
+  Zapas energii nowourodzonego pełzacza  
+_____________________________________________________
+  2
+
+_____________________________________________________
+  Rezerwa energii zostawiana po urodz. pełzacza  
+_____________________________________________________
+  2
+
+_____________________________________________________
+  Max. pełzaczy w 1 takcie  
+_____________________________________________________
+  4
+
+_____________________________________________________
+  Max. bakterii do zjedz. przez pełzacza w 1 takcie  
+_____________________________________________________
+  13
+
+_____________________________________________________
+  Współczynnik rozmnażania bakterii  
+_____________________________________________________
+  0,50
+
+_____________________________________________________
+  Współczynnik rozprzestrzeniania bakterii  
+_____________________________________________________
+  0,60
+
+_____________________________________________________
+  Początek wstrzyknięcia w  
+_____________________________________________________
+  40 takcie
+
+_____________________________________________________
+  Długość wstrzyknięcia  
+_____________________________________________________
+  25 takty/-ów
+
+_____________________________________________________
+  Wstrzyknięcie pełzaczy przez  
+_____________________________________________________
+  10 takty/taktów
+
+_____________________________________________________
+  Liczba bakterii do wstrzyknięcia  
+_____________________________________________________
+  32000
+
+_____________________________________________________
+  Liczba pełzaczy do wstrzyknięcia  
+_____________________________________________________
+  4000
+```
+
+\
+
+Podsumowując otrzymane wyniki, z pewnością możemy stwierdzić, że przy pomocy parametrów możemy dość realistycznie zamodelować rzeczywiste procesy, w tym *zakażenie* organizmu oraz jego *leczenie*. Wykonanie tego projektu pozwala zrozumieć jak wykorzystać język Java oraz narzędzie do automatyzacji budowania projektów Maven dla realizacji zadań.
+
+\pagebreak
+
+# Kod projektu
+
+## ArtLife.java
+```
 package com.aeh;
 
-//GUI
+
+import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.*;
 import java.io.*;
-
-//inne
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -80,10 +271,7 @@ class Init {
 //        locationModifiers.add(new LocationModifier(1, -1));
         return locationModifiers;
     }
-    
-    //strumień do wyjścia, który będzie wykorzystywany do wyświetlenia wyników
-    //np. może to być zapis do pliku lub konsoli
-    //także się ustawia kodowanie UTF-8
+
     public static PrintStream outStream;
 }
 
@@ -244,17 +432,14 @@ public class ArtLife {
 
     public static void main(String[] args) {
         try {
-            //zmień kodowanie na UTF-8
             Init.outStream = new PrintStream(System.out, true, "UTF-8");
         }
         catch (UnsupportedEncodingException e){
-            //w razie błędu ustaw strumień do konsoli
             Init.outStream = System.out;
             Init.outStream.println("Nieobslugiwane kodowanie.");
         }
         if (Init.ENABLE_LOGGING) {
             File logDir = new File("log/");
-            //jeżeli nie ma folderu log, utwórz go
             if (!logDir.exists()) {
                 logDir.mkdir();
             }
@@ -263,15 +448,13 @@ public class ArtLife {
             String timestamp = formatter.format(date).replaceAll("[:-]", "").replaceAll("[ ]", "_");
             Init.outStream.print("Zapisywanie do pliku log/" + timestamp + ".txt");
             try {
-                //ustaw strumień wyjściowy do pliku
                 OutputStream printStream = new FileOutputStream("log/" + timestamp + ".txt", true);
                 Init.outStream = new PrintStream(printStream, true, "UTF-8");
             } catch (IOException e) {
-                //wystąpił błąd
                 Init.outStream.println("Nie mogę zapisać logi");
+                e.printStackTrace();
             }
         }
-        //wyświetl parametry
         printParams();
 
         World mainWorld = new World();
@@ -309,21 +492,15 @@ public class ArtLife {
 
         totallyCreepers.add(totalNum(mainWorld, "CREEPERS"));
         totallyBacteria.add(totalNum(mainWorld, "BACTERIA"));
-        
-        //utwórz listę historii i zapisz STAN POCZĄTKOWY
+
         LinkedList<Cellule[][]> worldHistory = new LinkedList<Cellule[][]>();
         worldHistory.add(mainWorld.cloneBoard());
-        
-        //wybierz losowy punkt
+
         Point injectionPoint = new Point((int) Math.round((Init.SIZE_WORLD-1)*Math.random()),
                 (int) Math.round((Init.SIZE_WORLD-1)*Math.random()));
-        //zapisz liczbę do wstrzyknięcia bakterii
         int liczbaBakterii = Init.INJECTED_BACT_NUM;
-
-        //zapisz liczbę pełzaczy która będzie podawana w JEDNYM TAKCIE
         int liczbaPelzaczy = Init.INJECTED_CREEPERS_NUM / Init.INJECT_FOR_TACTS;
 
-        //jeżeli parametr PODAJ LECZENIE PRZEZ ... TAKTÓW jest dodatni
         boolean creeperOffsetOK = Init.INJECT_CREEPERS_OFFSET > 0;
 
         boolean prematureEndOfSimulation = false;
@@ -334,25 +511,18 @@ public class ArtLife {
                 //Wstrzyknięcie bakterii
                 if (Init.START_INJECTING_AT_TACT <= numTact
                         && numTact < Init.START_INJECTING_AT_TACT+Init.INJECT_FOR_TACTS) {
-                    //liczbaBakterii - ile jeszcze zostało bakterii
+
                     int liczba = liczbaBakterii/((Init.START_INJECTING_AT_TACT+Init.INJECT_FOR_TACTS) - numTact);
-                    //podzielone przez liczbę pozostałych taktów
 
                     mainWorld.board[injectionPoint.x][injectionPoint.y].addBactNum(liczba);
-
-                    //zmniejsz liczbę bakterii
                     liczbaBakterii-=liczba;
                 }
-                
-                //jeżeli parametr PODAJ LECZENIE PRZEZ ... TAKTÓW jest dodatni
-                if (creeperOffsetOK) {
 
+                if (creeperOffsetOK) {
                   //Wstrzyknięcie pełzaczy
                   if (Init.START_INJECTING_AT_TACT + Init.INJECT_CREEPERS_OFFSET <= numTact
                           && numTact < Init.START_INJECTING_AT_TACT+Init.INJECT_FOR_TACTS + Init.INJECT_CREEPERS_OFFSET) {
-                      
-                      //utwórz liczbaPełzaczy instancji Creeper
-                      //np. liczbaPełzaczy = 3000 / 10 taktów = 300 - utwórz 300 obiektów Creeper
+
                       for (int i = 0; i < liczbaPelzaczy; i++) {
                           mainWorld.board[injectionPoint.x][injectionPoint.y].addCreeper(new Creeper(injectionPoint.x, injectionPoint.y));
                       }
@@ -373,8 +543,7 @@ public class ArtLife {
                 num++;
                 numTact++;
             }
-            
-            //zapisz zrzut symulacji do listy historii
+
             worldHistory.add(mainWorld.cloneBoard());
 
             Init.outStream.println("_____________________________________________________");
@@ -401,12 +570,10 @@ public class ArtLife {
                 + " - komórki umierają/koniec symulacji.");
         Init.outStream.println();
 
-        //utwórz OKNO GŁÓWNE z graficzną reprezentacją świata
         MainWindow mainWindow = new MainWindow(worldHistory);
     }
 }
 
-//Timer wykorzystywany do przełączania zrzutów symulacji
 class TimerTick implements ActionListener {
     private MainWindow parent;
     private int lastId;
@@ -418,8 +585,6 @@ class TimerTick implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent evt) {
         if (!this.parent.jestKoniec()) {
-            //przełącz na nastepny zrzut symulacji
-            //np. takt 50 -> 55
             this.parent.nastepny();
         } else {
             this.parent.stopTimer();
@@ -427,10 +592,7 @@ class TimerTick implements ActionListener {
     }
 }
 
-//Panel z graficzną reprezentacją komórek
-//jest częścią głównego okna MainWindow
 class WorldGraphics extends JPanel {
-    //bieżący stan komórek we zrzucie symulacji
     private Cellule[][] board;
     private int rozmiarKomorki;
 
@@ -439,7 +601,6 @@ class WorldGraphics extends JPanel {
         this.rozmiarKomorki = rozmiarKomorki;
     }
 
-    //odśwież stan świata
     public void updateState(Cellule[][] board, int rozmiarKomorki) {
         this.board = board;
         this.rozmiarKomorki = rozmiarKomorki;
@@ -456,17 +617,15 @@ class WorldGraphics extends JPanel {
         setBackground(new Color(36,38,48));
         for (int i = 0; i < Init.SIZE_WORLD; i++) {
             for (int j = 0; j < Init.SIZE_WORLD; j++) {
-                //zdecyduj jakiego koloru ma być komórka
                 Color cellColor = blendColors(getBactColor(this.board[j][i]), getCreeperColor(this.board[j][i]));
-                //ustaw kolor
+
                 g.setColor(cellColor);
 
                 g.fillRect(i*rozmiarKomorki, j*rozmiarKomorki, rozmiarKomorki, rozmiarKomorki);
             }
         }
     }
-    
-    //intensywność koloru komórki z bakteriami
+
     private Color getBactColor(Cellule cell) {
         float alpha = (float)(cell.getBactNum()) / (float)(Init.MAX_INTENSITY_COUNT);
         if (alpha > 0) {
@@ -475,7 +634,6 @@ class WorldGraphics extends JPanel {
         }
         return new Color((float) 0.5, (float) 0.25, 1, alpha);
     }
-    //intensywnośc koloru komórki z pełzaczami
     private Color getCreeperColor(Cellule cell) {
         float alpha = (float)(cell.getCreepersNum()) / (float)(Init.MAX_INTENSITY_COUNT);
         if (alpha > 0) {
@@ -484,15 +642,12 @@ class WorldGraphics extends JPanel {
         }
         return new Color((float) 0.25, 1, (float) 0.5, alpha);
     }
-    
-    //zdecyduj jakiego koloru ma być komórka
+
     private Color blendColors(Color a, Color b) {
         int[] aCompArray = { a.getRed(), a.getGreen(), a.getBlue(), a.getAlpha() };
         int[] bCompArray = { b.getRed(), b.getGreen(), b.getBlue(), b.getAlpha() };
         int[] blendResult = new int[4];
         for (int i = 0; i < blendResult.length; i++) {
-            //jeżeli nieprzezroczystość koloru a > koloru b,
-            //to zwróć odpowiednią komponentę tego koloru, inaczej zwróć komponentę koloru b
             blendResult[i] = aCompArray[3] > bCompArray[3] ? aCompArray[i] : bCompArray[i];
         }
         return new Color(blendResult[0], blendResult[1], blendResult[2], blendResult[3]);
@@ -501,18 +656,14 @@ class WorldGraphics extends JPanel {
 
 }
 
-//Główne okno z graficzną reprezentacją
 class MainWindow extends JFrame implements ActionListener {
-    //Panel z graficzną reprezentacją komórek
     private WorldGraphics worldGraphics;
     private JLabel label;
     private JButton controlButton1, controlButton2;
 
     private int windowSize;
-    
-    //Lista historii
+
     private LinkedList<Cellule[][]> board;
-    //Iterator do otrzymania następnego elementu listy
     ListIterator<Cellule[][]> iterator;
 
     private Cellule[][] biezacy;
@@ -529,20 +680,17 @@ class MainWindow extends JFrame implements ActionListener {
         this.board = board;
         this.initSnapshot();
         this.windowSize = windowSize;
-        //panel z przyciskami oraz nadpisem
         JPanel controlPanel = new JPanel();
         this.controlButton1 = new JButton("Rozpocznij");
         this.controlButton2 = new JButton("Zatrzymaj");
         this.controlButton2.setEnabled(false);
         label = new JLabel("Stan poczatkowy");
-        
-        //działania, które wykonują przyciski
+
         controlButton1.addActionListener(this);
         controlButton2.addActionListener(this);
         controlButton1.setActionCommand("START");
         controlButton2.setActionCommand("STOP");
-        
-        //ustawienia głównego okna
+
         this.setBackground(new Color(36,38,38));
         controlPanel.add(controlButton1); controlPanel.add(label);
         controlPanel.add(controlButton2);
@@ -559,7 +707,7 @@ class MainWindow extends JFrame implements ActionListener {
             }
         });
 
-        //ustawienie timera
+
         this.timer = new Timer(Init.TACT_TIME_DURATION, new TimerTick(this, this.board.size() - 1));
         this.timer.setInitialDelay(50);
 
@@ -572,8 +720,7 @@ class MainWindow extends JFrame implements ActionListener {
         }
         return -1;
     }
-    
-    //przygotuj iterator
+
     private void initSnapshot() {
         this.iterator = this.board.listIterator();
         if (this.iterator.hasNext()) {
@@ -588,8 +735,7 @@ class MainWindow extends JFrame implements ActionListener {
     public boolean jestKoniec() {
         return this.getCurrentId() == this.board.size() - 1;
     }
-    
-    //wróć iterator na początek listy
+
     private void poczatek() {
         while (this.iterator.hasPrevious()) {
             this.biezacy = this.iterator.previous();
@@ -624,10 +770,8 @@ class MainWindow extends JFrame implements ActionListener {
 
     private void updateState() {
         if (worldGraphics != null) {
-            //odśwież panel ze światem
             worldGraphics.updateState(this.biezacy);
         } else {
-            //zainicjalizuj panel ze światem jeżeli nie jest
             this.worldGraphics = new WorldGraphics(this.biezacy, 41);
             this.add(worldGraphics);
             worldGraphics.setBounds(0, 0, this.windowSize, this.windowSize);
@@ -647,15 +791,14 @@ class MainWindow extends JFrame implements ActionListener {
         String command = e.getActionCommand();
 
         switch (command) {
-            //controlButton1
             case "START":
                 this.startTimer();
                 break;
-            
-            //controlButton2
+
             case "STOP":
                 this.stopTimer();
                 break;
         }
     }
 }
+```

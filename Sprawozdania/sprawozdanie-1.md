@@ -10,25 +10,25 @@ Jaki stan systemu uważamay jako stabilny. Jest to taki stan, przy którym liczb
 
 ### Wykres 1
 
+![Wykres 1](img/wykres1.png)
 Na pierwszym wykresie otrzymaliśmy skok liczby bakterii do ok. 10 tysięcy, ale został on zniwelowany przez pełzaczy, liczba który sięga ok. 5 tysięcy po kilkunastu taktów, dalej liczba obydwu ogranizmów trzyma się 300-500.
 
-![Wykres 1](img/wykres1.png)
 
 ---
 
 ### Wykres 2
 
+![Wykres 2](img/wykres2.png)
 Na drugim wykresie zobaczymy cykliczne wahania ze średnią amplitudą ok. 400 bakterii oraz 200 pełzaczy. Także można zobaczyć modulacje takich wahań z okresem 300 taktów.
 
-![Wykres 2](img/wykres2.png)
 
 ---
 
 ### Wykres 3
 
+![Wykres 3](img/wykres3.png)
 Na trzecim wykresie mamy skok liczby bakterii oraz pełzaczy do ok 4 tysięcy. Na początku są wahania 600-700 organizmów, od 76 taktu one maleją.
 
-![Wykres 3](img/wykres3.png)
 
 ---
 
