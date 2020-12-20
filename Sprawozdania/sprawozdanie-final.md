@@ -57,13 +57,15 @@ Zadaniem opcjonalnym jest implementacja świata w postaci graficznej, z symulacj
 
 W celu implementacji zakażenia w symulowanym świecie, należy dokonać wyboru punktu wsztrzyknięcia. Najlepiej to zrobić przy pomocy losowania dwóch liczb odpowiadającym pozycji losowanego punktu.
 Pojawiły się dodatkowe parametry, niezbędne do ustawienia parametrów zakażenia:
-* Łączna liczba bakterii wykorzystanych przy zakażeniu - **INJECTED_BACT_NUM**
-* Od którego takty zaczyna się wstrzyknięcie - **START_INJECTING_AT_TACT**
-* Długość wstrzyknięcia - **INJECT_FOR_TACTS**
+
+- Łączna liczba bakterii wykorzystanych przy zakażeniu - **INJECTED_BACT_NUM**
+- Od którego takty zaczyna się wstrzyknięcie - **START_INJECTING_AT_TACT**
+- Długość wstrzyknięcia - **INJECT_FOR_TACTS**
 
 Także są parametry *leczenia*:
-* Łączna liczba pełzaczy do leczenia - **INJECTED_CREEPERS_NUM**
-* Przez ile taktów od początku zakażenia zacząć leczenie - **INJECT_CREEPERS_OFFSET**
+
+- Łączna liczba pełzaczy do leczenia - **INJECTED_CREEPERS_NUM**
+- Przez ile taktów od początku zakażenia zacząć leczenie - **INJECT_CREEPERS_OFFSET**
 
 Końcowa wersja projektu przedstawiona w postaci graficznej, która da możliwość zobaczyć proces zakażenia, a następnie działanie procesu lecznenia.
 
