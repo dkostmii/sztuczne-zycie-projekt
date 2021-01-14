@@ -1,33 +1,29 @@
-/* Sztuczne życie v.2.1
-   Ostatnia aktualizacja 2017-04-11
-   CopyLeft Feliks Kurp 2017
-   Cooperation Andrzej Pepłowski (IZ-2/VI)
-*/
+\begin{verbnobox}[\fontsize{9pt}{9pt}\selectfont]
 package com.aeh;
 
-//GUI
+
+import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.*;
 import java.io.*;
-
-//inne
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.LinkedList;
 import java.util.ListIterator;
 
 class Init {
 
-    static final int INJECTED_BACT_NUM = 64000; //Liczba bakterii do wstrzyknięcia
-    static final int INJECTED_CREEPERS_NUM = 8000; //Liczba pełzaczy do wstrzyknięcia
+    static final int INJECTED_BACT_NUM = 32000; //Liczba bakterii do wstrzyknięcia
+    static final int INJECTED_CREEPERS_NUM = 4000; //Liczba pełzaczy do wstrzyknięcia
 
     static final int START_INJECTING_AT_TACT = 40; //Rozpoczęcie wtrzyknięcia w takcie
-    static final int INJECT_FOR_TACTS = 35; //Długość wstrzyknięcia w taktach
+    static final int INJECT_FOR_TACTS = 25; //Długość wstrzyknięcia w taktach
     static final int INJECT_CREEPERS_OFFSET = 10; //Podawanie leczenia przez ... taktów
     
     static final int SIZE_WORLD = 10; //rozmiar świata - NIE ZMIENIAĆ
@@ -80,10 +76,7 @@ class Init {
 //        locationModifiers.add(new LocationModifier(1, -1));
         return locationModifiers;
     }
-    
-    //strumień do wyjścia, który będzie wykorzystywany do wyświetlenia wyników
-    //np. może to być zapis do pliku lub konsoli
-    //także się ustawia kodowanie UTF-8
+
     public static PrintStream outStream;
 }
 
@@ -244,17 +237,14 @@ public class ArtLife {
 
     public static void main(String[] args) {
         try {
-            //zmień kodowanie na UTF-8
             Init.outStream = new PrintStream(System.out, true, "UTF-8");
         }
         catch (UnsupportedEncodingException e){
-            //w razie błędu ustaw strumień do konsoli
             Init.outStream = System.out;
             Init.outStream.println("Nieobslugiwane kodowanie.");
         }
         if (Init.ENABLE_LOGGING) {
             File logDir = new File("log/");
-            //jeżeli nie ma folderu log, utwórz go
             if (!logDir.exists()) {
                 logDir.mkdir();
             }
@@ -263,15 +253,13 @@ public class ArtLife {
             String timestamp = formatter.format(date).replaceAll("[:-]", "").replaceAll("[ ]", "_");
             Init.outStream.print("Zapisywanie do pliku log/" + timestamp + ".txt");
             try {
-                //ustaw strumień wyjściowy do pliku
                 OutputStream printStream = new FileOutputStream("log/" + timestamp + ".txt", true);
                 Init.outStream = new PrintStream(printStream, true, "UTF-8");
             } catch (IOException e) {
-                //wystąpił błąd
                 Init.outStream.println("Nie mogę zapisać logi");
+                e.printStackTrace();
             }
         }
-        //wyświetl parametry
         printParams();
 
         World mainWorld = new World();
@@ -309,21 +297,15 @@ public class ArtLife {
 
         totallyCreepers.add(totalNum(mainWorld, "CREEPERS"));
         totallyBacteria.add(totalNum(mainWorld, "BACTERIA"));
-        
-        //utwórz listę historii i zapisz STAN POCZĄTKOWY
+
         LinkedList<Cellule[][]> worldHistory = new LinkedList<Cellule[][]>();
         worldHistory.add(mainWorld.cloneBoard());
-        
-        //wybierz losowy punkt
+
         Point injectionPoint = new Point((int) Math.round((Init.SIZE_WORLD-1)*Math.random()),
                 (int) Math.round((Init.SIZE_WORLD-1)*Math.random()));
-        //zapisz liczbę do wstrzyknięcia bakterii
         int liczbaBakterii = Init.INJECTED_BACT_NUM;
-
-        //zapisz liczbę pełzaczy która będzie podawana w JEDNYM TAKCIE
         int liczbaPelzaczy = Init.INJECTED_CREEPERS_NUM / Init.INJECT_FOR_TACTS;
 
-        //jeżeli parametr PODAJ LECZENIE PRZEZ ... TAKTÓW jest dodatni
         boolean creeperOffsetOK = Init.INJECT_CREEPERS_OFFSET > 0;
 
         boolean prematureEndOfSimulation = false;
@@ -334,27 +316,21 @@ public class ArtLife {
                 //Wstrzyknięcie bakterii
                 if (Init.START_INJECTING_AT_TACT <= numTact
                         && numTact < Init.START_INJECTING_AT_TACT+Init.INJECT_FOR_TACTS) {
-                    //liczbaBakterii - ile jeszcze zostało bakterii
+
                     int liczba = liczbaBakterii/((Init.START_INJECTING_AT_TACT+Init.INJECT_FOR_TACTS) - numTact);
-                    //podzielone przez liczbę pozostałych taktów
 
                     mainWorld.board[injectionPoint.x][injectionPoint.y].addBactNum(liczba);
-
-                    //zmniejsz liczbę bakterii
                     liczbaBakterii-=liczba;
                 }
-                
-                //jeżeli parametr PODAJ LECZENIE PRZEZ ... TAKTÓW jest dodatni
-                if (creeperOffsetOK) {
 
+                if (creeperOffsetOK) {
                   //Wstrzyknięcie pełzaczy
                   if (Init.START_INJECTING_AT_TACT + Init.INJECT_CREEPERS_OFFSET <= numTact
                           && numTact < Init.START_INJECTING_AT_TACT+Init.INJECT_FOR_TACTS + Init.INJECT_CREEPERS_OFFSET) {
-                      
-                      //utwórz liczbaPełzaczy instancji Creeper
-                      //np. liczbaPełzaczy = 3000 / 10 taktów = 300 - utwórz 300 obiektów Creeper
+
                       for (int i = 0; i < liczbaPelzaczy; i++) {
-                          mainWorld.board[injectionPoint.x][injectionPoint.y].addCreeper(new Creeper(injectionPoint.x, injectionPoint.y));
+                          mainWorld.board[injectionPoint.x][injectionPoint.y].addCreeper(
+                              new Creeper(injectionPoint.x, injectionPoint.y));
                       }
 
                   }
@@ -373,8 +349,7 @@ public class ArtLife {
                 num++;
                 numTact++;
             }
-            
-            //zapisz zrzut symulacji do listy historii
+
             worldHistory.add(mainWorld.cloneBoard());
 
             Init.outStream.println("_____________________________________________________");
@@ -397,16 +372,18 @@ public class ArtLife {
             Init.outStream.format("%8d%n", totallyCreepers.get(i));
             //Init.outStream.println(i + "  " + totallyCreepers.get(i) + "  " + totallyBacteria.get(i));
         }
-        if (prematureEndOfSimulation) Init.outStream.println("Sumaryczna liczba bakterii przekroczyła "+ Init.BACT_NUM_LIMIT
+        if (prematureEndOfSimulation) {
+            Init.outStream.println(
+                "Sumaryczna liczba bakterii przekroczyła " 
+                + Init.BACT_NUM_LIMIT 
                 + " - komórki umierają/koniec symulacji.");
+        }
         Init.outStream.println();
 
-        //utwórz OKNO GŁÓWNE z graficzną reprezentacją świata
         MainWindow mainWindow = new MainWindow(worldHistory);
     }
 }
 
-//Timer wykorzystywany do przełączania zrzutów symulacji
 class TimerTick implements ActionListener {
     private MainWindow parent;
     private int lastId;
@@ -418,8 +395,6 @@ class TimerTick implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent evt) {
         if (!this.parent.jestKoniec()) {
-            //przełącz na nastepny zrzut symulacji
-            //np. takt 50 -> 55
             this.parent.nastepny();
         } else {
             this.parent.stopTimer();
@@ -427,10 +402,7 @@ class TimerTick implements ActionListener {
     }
 }
 
-//Panel z graficzną reprezentacją komórek
-//jest częścią głównego okna MainWindow
 class WorldGraphics extends JPanel {
-    //bieżący stan komórek we zrzucie symulacji
     private Cellule[][] board;
     private int rozmiarKomorki;
 
@@ -439,7 +411,6 @@ class WorldGraphics extends JPanel {
         this.rozmiarKomorki = rozmiarKomorki;
     }
 
-    //odśwież stan świata
     public void updateState(Cellule[][] board, int rozmiarKomorki) {
         this.board = board;
         this.rozmiarKomorki = rozmiarKomorki;
@@ -456,17 +427,16 @@ class WorldGraphics extends JPanel {
         setBackground(new Color(36,38,48));
         for (int i = 0; i < Init.SIZE_WORLD; i++) {
             for (int j = 0; j < Init.SIZE_WORLD; j++) {
-                //zdecyduj jakiego koloru ma być komórka
-                Color cellColor = blendColors(getBactColor(this.board[j][i]), getCreeperColor(this.board[j][i]));
-                //ustaw kolor
+                Color cellColor = blendColors(getBactColor(this.board[j][i]),
+                    getCreeperColor(this.board[j][i]));
+
                 g.setColor(cellColor);
 
                 g.fillRect(i*rozmiarKomorki, j*rozmiarKomorki, rozmiarKomorki, rozmiarKomorki);
             }
         }
     }
-    
-    //intensywność koloru komórki z bakteriami
+
     private Color getBactColor(Cellule cell) {
         float alpha = (float)(cell.getBactNum()) / (float)(Init.MAX_INTENSITY_COUNT);
         if (alpha > 0) {
@@ -475,7 +445,6 @@ class WorldGraphics extends JPanel {
         }
         return new Color((float) 0.5, (float) 0.25, 1, alpha);
     }
-    //intensywnośc koloru komórki z pełzaczami
     private Color getCreeperColor(Cellule cell) {
         float alpha = (float)(cell.getCreepersNum()) / (float)(Init.MAX_INTENSITY_COUNT);
         if (alpha > 0) {
@@ -484,15 +453,12 @@ class WorldGraphics extends JPanel {
         }
         return new Color((float) 0.25, 1, (float) 0.5, alpha);
     }
-    
-    //zdecyduj jakiego koloru ma być komórka
+
     private Color blendColors(Color a, Color b) {
         int[] aCompArray = { a.getRed(), a.getGreen(), a.getBlue(), a.getAlpha() };
         int[] bCompArray = { b.getRed(), b.getGreen(), b.getBlue(), b.getAlpha() };
         int[] blendResult = new int[4];
         for (int i = 0; i < blendResult.length; i++) {
-            //jeżeli nieprzezroczystość koloru a > koloru b,
-            //to zwróć odpowiednią komponentę tego koloru, inaczej zwróć komponentę koloru b
             blendResult[i] = aCompArray[3] > bCompArray[3] ? aCompArray[i] : bCompArray[i];
         }
         return new Color(blendResult[0], blendResult[1], blendResult[2], blendResult[3]);
@@ -501,18 +467,14 @@ class WorldGraphics extends JPanel {
 
 }
 
-//Główne okno z graficzną reprezentacją
 class MainWindow extends JFrame implements ActionListener {
-    //Panel z graficzną reprezentacją komórek
     private WorldGraphics worldGraphics;
     private JLabel label;
     private JButton controlButton1, controlButton2;
 
     private int windowSize;
-    
-    //Lista historii
+
     private LinkedList<Cellule[][]> board;
-    //Iterator do otrzymania następnego elementu listy
     ListIterator<Cellule[][]> iterator;
 
     private Cellule[][] biezacy;
@@ -529,20 +491,17 @@ class MainWindow extends JFrame implements ActionListener {
         this.board = board;
         this.initSnapshot();
         this.windowSize = windowSize;
-        //panel z przyciskami oraz nadpisem
         JPanel controlPanel = new JPanel();
         this.controlButton1 = new JButton("Rozpocznij");
         this.controlButton2 = new JButton("Zatrzymaj");
         this.controlButton2.setEnabled(false);
         label = new JLabel("Stan poczatkowy");
-        
-        //działania, które wykonują przyciski
+
         controlButton1.addActionListener(this);
         controlButton2.addActionListener(this);
         controlButton1.setActionCommand("START");
         controlButton2.setActionCommand("STOP");
-        
-        //ustawienia głównego okna
+
         this.setBackground(new Color(36,38,38));
         controlPanel.add(controlButton1); controlPanel.add(label);
         controlPanel.add(controlButton2);
@@ -559,7 +518,7 @@ class MainWindow extends JFrame implements ActionListener {
             }
         });
 
-        //ustawienie timera
+
         this.timer = new Timer(Init.TACT_TIME_DURATION, new TimerTick(this, this.board.size() - 1));
         this.timer.setInitialDelay(50);
 
@@ -572,8 +531,7 @@ class MainWindow extends JFrame implements ActionListener {
         }
         return -1;
     }
-    
-    //przygotuj iterator
+
     private void initSnapshot() {
         this.iterator = this.board.listIterator();
         if (this.iterator.hasNext()) {
@@ -588,8 +546,7 @@ class MainWindow extends JFrame implements ActionListener {
     public boolean jestKoniec() {
         return this.getCurrentId() == this.board.size() - 1;
     }
-    
-    //wróć iterator na początek listy
+
     private void poczatek() {
         while (this.iterator.hasPrevious()) {
             this.biezacy = this.iterator.previous();
@@ -624,10 +581,8 @@ class MainWindow extends JFrame implements ActionListener {
 
     private void updateState() {
         if (worldGraphics != null) {
-            //odśwież panel ze światem
             worldGraphics.updateState(this.biezacy);
         } else {
-            //zainicjalizuj panel ze światem jeżeli nie jest
             this.worldGraphics = new WorldGraphics(this.biezacy, 41);
             this.add(worldGraphics);
             worldGraphics.setBounds(0, 0, this.windowSize, this.windowSize);
@@ -647,15 +602,14 @@ class MainWindow extends JFrame implements ActionListener {
         String command = e.getActionCommand();
 
         switch (command) {
-            //controlButton1
             case "START":
                 this.startTimer();
                 break;
-            
-            //controlButton2
+
             case "STOP":
                 this.stopTimer();
                 break;
         }
     }
 }
+\end{verbnobox}

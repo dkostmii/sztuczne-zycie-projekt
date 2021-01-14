@@ -1,0 +1,165 @@
+\centering
+{\LARGE\bfseries Przeprowadzone badania \par}
+\vspace{8mm}
+
+\raggedright
+Przedstawione badanie przeprowadzone są na podstawie wyników z 7 uruchomień.
+
+Wyniki uruchomień można podzielić na dwie grupy: \textbf{pierwsza z nich} to uruchomienia z dość krótkim \textit{okresem wstrzynknięcia}.
+\vspace{4mm}
+
+Najważniejsze początkowe parametry uruchomień tej grupy są następne:
+\vspace{4mm}
+
+\import{params}{uruch01_a.tex}
+\newpage
+
+%% GRUPA 1
+%% ----------------------------------------------------------------
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{wykres01_a.png}
+\end{figure}
+Z powyższego wykresu widać, że przy podaniu dość dużej illości bakterii w krótkim okresie, niezwłocznie przekracza ona liczbę \textit{1 million}, która jest maksymalnie dopuszczalną liczbą bakterii w badanym świecie.
+\vspace{4mm}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.26\linewidth]{uruch01_a.png}
+\end{figure}
+
+\textit{2D reprezentacja pokazuje}, że w 50-tym takcie mamy dość mały obszar zakażenia w porównaniu do bieżącej liczby bakterii.
+\newpage
+
+
+Nie zmieniając parametrów uruchomimy jeszcze raz, żeby zobaczyć czy będzie liczba bakterii przekraczać \textit{max. 1 million} nadal.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{wykres02_a.png}
+\end{figure}
+
+
+Po ponownym uruchomieniu programu, zobaczymy, że liczba bakterii już sięga tylko \textit{ok. 600 tysięcy}, ale liczba jest nadal dość dużą, co zobaczymy w \textit{50 takcie} 2D reprezentacji.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.26\linewidth]{uruch02_a.png}
+\end{figure}
+\newpage
+
+Następnie, uruchomimy program z nieco innymi parametrami, a właśnie:
+
+
+\import{params}{uruch02_alt.tex}
+\vspace{2mm}
+
+W tym uruchomieniu zwiększymy długość wstrzynknięcia o \textit{20 taktów}.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{wykres02_alt.png}
+\end{figure}
+
+
+Wykres danej symulacji prawie niczym się nie różni od pierwszego, tylko możemy zobaczyć słabą aktywność po spadie liczby obu organizmów (nadal są aktywne, ponieważ rozmieszczone są w różnych komórkach, pełzaczy nie mogą zjeść bakterie w sąsiędnich komórkach).
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.26\linewidth]{uruch02_alt.png}
+\end{figure}
+
+
+Obszar zakażenia jest nieco mniejszy, co mówi o słabszej aktywność bakterii (nie zmieniamy współczynnika rozmnażania bakterii).
+\newpage
+
+W następnym uruchomieniu jeszcze raz zwiekszymy \textit{długość wstrzynknięcia}, a także zmniejszymy \textit{liczbę do wstrzyknięcia} obu organizmów, żeby otrzymać bardziej wyraźne wyniki:
+
+\import{params}{uruch03_a.tex}
+\vspace{2mm}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{wykres03_a.png}
+\end{figure}
+
+
+Po przeprowadzeniu symulacji, widzimy, że jest podobny skok liczby bakterii od \textbf{40} do \textbf{75} taktu, ale jeżeli zwrócimy uwagę, to aktywność obu ogranizmów nadal trwa \textit(takty 79-105), i tylko po takcie 105 zaczyna spadać.
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.26\linewidth]{uruch03_a.png}
+\end{figure}
+
+Obszar zakażenia jeszcze się zminiejszył, ponieważ wstrzyknięcia dokonano w dłuższym okresie.
+\newpage
+
+%% GRUPA 2
+%%-------------------------------------------------------
+\textbf{W następnej grupie} się znajdują wyniki uruchomień z bardzo długim okresem wstrzyknięcia:
+
+Początkowe parametry dla danej grupy to:
+
+\import{params}{uruch01_b.tex}
+
+Długość wsztrzyknięcia stanowi 100 taktów, co o 6,6 razy więcej niż w początkowym stanie poprzedniej grupy symulacji.
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{wykres01_b.png}
+\end{figure}
+
+Wykres zupełnie się różni od poprzedniej grupy. Maksymalna liczba bakterii jest o wiele mniejsza - ok 25 tysięcy. Już wyrażnie widać końcową aktywność bakterii oraz pełzaczy, po spadzie w okresie od \textbf{79} do \textbf{157} taktu.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.26\linewidth]{uruch01_b.JPG}
+\end{figure}
+
+Wynik uruchomienia symulacji w wyglądzie graficznej reprezentacji pokazuje, że obszar zakażenia jest bardzo mały, nie przekraczający 6 komorek w promieniu, zakażenie jest zlokalizowane.
+\newpage
+
+Następnie zmniejszymy długość wstrzyknięcia o 20 taktów
+\import{params}{uruch02_b.tex}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{wykres02_b.png}
+\end{figure}
+
+Otrzymaliśmy wykres, w którym wsztrzyknięcie nie powoduje żadnych gwałtownych zmian, ale nadal widać \textit{końcowa aktywność}, charakterystyczną właśnie dla wstrzyknięcia.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.26\linewidth]{uruch02_b.JPG}
+\end{figure}
+
+W graficznej reprezentacji prawie nie widzimy momentu zakażenia, świat jest stabilny.
+\newpage
+
+W ostatnim uruchomieniu jeszcze zmniejszymy \textit{okres wstrzyknięcia}, oraz zwiększymy \textit{początkową liczbę} bakterii oraz pełzaczy
+
+\import{params}{uruch03_b.tex}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{wykres03_b.png}
+\end{figure}
+
+Jak widać, właśnie w skutek zwiększenia początkowej liczby organizmów otrzymujemy bardziej wyraźny wynik zakażenia.
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.26\linewidth]{uruch03_b.JPG}
+\end{figure}
+
+Pomimo tego, mamy dwa bardzo małe obszary zakażenia. Znaczy to, że aktywność bakterii jest na bardzo niskim poziomie, ponieważ, jeżeli zobaczymy na wykresie, \textit{liczba pełzaczy} prawie od razu po wstrzyknięciu wzrosła, dlatego nie zobaczymy dużego obszaru zakażenia w graficznej reprezentacji.
+
+\clearpage

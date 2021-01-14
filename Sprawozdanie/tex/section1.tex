@@ -1,0 +1,101 @@
+\centering
+{\LARGE\bfseries Wstępny opis projektu \par}
+\vspace{8mm}
+
+\raggedright
+Zadaniem projektu było dokonanie wtrzyknięcia dużej liczby bakterii do komórek świata, co odbywa się przy \textit{zakażeniu} w rzeczywistości, dlatego dalej biędziemy nazywać \textit{wstrzyknięcie bakterii} \textbf{zakażeniem}.
+Po zakażeniu komórek świata należy podać niektórą ilość pełzaczy, co jest bardzo podobne do \textit{podawania leczenia}. Dokonywać takiego leczenia należy przez niektóry czas, tak żeby zobaczyć efekt, ponieważ algorytm pobiera wyniki przy domyślnych ustawieniach \textit{co 10 taktów}.
+Zadaniem opcjonalnym jest implementacja świata w postaci graficznej, z symulacją w czasie rzeczywistym. Pozwala to lepiej zrozumieć zachowanie modelu \textit{Drapieżniki i ofiary} w praktyce. \par
+
+W celu implementacji zakażenia w symulowanym świecie, należy dokonać wyboru punktu wsztrzyknięcia. Najlepiej to zrobić przy pomocy losowania dwóch liczb odpowiadającym pozycji losowanego punktu.
+\vspace{4mm}
+
+Pojawiły się dodatkowe parametry, niezbędne do ustawienia parametrów zakażenia:
+\begin{itemize}
+    \item Łączna liczba bakterii wykorzystanych przy zakażeniu - \textbf{INJECTED\_BACT\_NUM}
+    \item Od którego takty zaczyna się wstrzyknięcie - \textbf{START\_INJECTING\_AT\_TACT}
+    \item Długość wstrzyknięcia - \textbf{INJECT\_FOR\_TACTS}
+\end{itemize}
+\vspace{2mm}
+
+
+Także są parametry \textit{leczenia}:
+\begin{itemize}
+    \item Łączna liczba pełzaczy do leczenia - \textbf{INJECTED\_CREEPERS\_NUM}
+    \item Przez ile taktów od początku zakażenia zacząć leczenie - \textbf{INJECT\_CREEPERS\_OFFSET}
+\end{itemize}
+\vspace{4mm}
+
+Końcowa wersja projektu przedstawiona w postaci graficznej, która da możliwość zobaczyć proces zakażenia, a następnie działanie procesu leczenia.
+\vspace{2mm}
+\newpage
+
+\vspace*{\fill}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\linewidth]{spr2/wyglad-okna.png}
+    \caption{Wygląd okna symulacji\label{fig:exampleWygladOkna}}
+\end{figure}
+\vspace{6mm}
+
+
+Na \textit{Rysunku \ref{fig:exampleWygladOkna}} przedstawiono wygląd okna symulacji po uruchomieniu programu. Fioletowym kolorem zaznaczono komórki swiata, w których liczba bakterii jest \textit{większa od liczby pełzaczy}, a zielonym - \textit{równa lub mniejsza}. 
+
+
+W ciemniejszych komórkach liczba organizmów stanowi zero.
+\vspace{8mm}
+
+Żeby proces zakażenia oraz leczenia było łatwo zobaczyć, został dodany parametr \textbf{MAX\_INTENSITY\_COUNT}, który wyznacza maksymalną intensywność koloru dla komórki podawając pewną liczbę organizmów. 
+\vspace{2mm}
+
+Działa to w taki sposób, że dzielimy znaczenie alpha ustawionego koloru dla komórki przez \textbf{MAX\_INTENSITY\_COUNT}. Należy zwrócić uwagę, że na \textit{Rysunku \ref{fig:exampleWygladOkna}} alpha jest znacznie mniejsza od 1.
+\vspace*{\fill}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \subfigure{\includegraphics[width=0.36\linewidth]{spr2/sim01.png}}
+    \subfigure{\includegraphics[width=0.36\linewidth]{spr2/sim02.png}}\par
+    \subfigure{\includegraphics[width=0.36\linewidth]{spr2/sim03.png}}
+    \subfigure{\includegraphics[width=0.36\linewidth]{spr2/sim04.png}}
+    \caption{Przykład uruchomienia symulacji (takty 50-65)\label{fig:exampleGraphics}}
+\end{figure}
+\vspace{6mm}
+
+
+W danym przykładzie parametr \textbf{START\_INJECTING\_AT\_TACT} ustawiono na \textbf{40}. Ale ponieważ zakażenie dopiero zaczyna się w tym takcie, zobaczymy efekt chociażby po kilku taktach, a w danym przypadku w takcie 45, bo ustawiliśmy parametr \textbf{VEW\_NUM\_TACT} na \textbf{5}, co znaczy, że aktualizujemy stan symulacji co 5 taktów.
+
+
+Najbardziej znaczącymi taktami w danej symulacji są takty 50-65.
+\begin{itemize}
+\item W takcie 50 rozszerza się obszar zakażenia, który na początku symulacji znajduje się w jednym punkcie.
+\item W takcie 55 gwałtownie rośnie liczba pełzaczy, które wykonują funkcje obronną symulowanego orgranizmu.
+\item W takcie 60 widać delokalizację całego procesu, zajmuje on prawie cały obszar świata, przewagę w liczbie trzymają pełzacze.
+\item W takcie 65 liczba obu organizmów zaczyna się zmniejszać się, leczenie już się zakończyło.
+\end{itemize}
+\vspace{12mm}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\linewidth]{spr2/sim-end.png}
+    \caption{Koniec procesów zakażenia oraz leczenia\label{fig:exampleSimEnd}}
+\end{figure}
+\vspace{6mm}
+
+
+Na \textit{Rysunku \ref{fig:exampleSimEnd}} zobaczymy stan świata w \textit{takcie 70}. Niczym się nie różni on od stanu stabilnego.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{spr2/wykres.png}
+    \caption{Wykres uruchominej na \textit{Rysunku \ref{fig:exampleGraphics}} symulacji}
+\end{figure}
+
+\clearpage
+Parametry uruchomienia powyższego przykładu:
+\vspace{4mm}
+
+\subimport{spec}{params1.tex}
+\newpage
